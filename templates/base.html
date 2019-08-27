@@ -1,0 +1,82 @@
+
+<html>
+
+	
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<p id="demo"></p>
+
+<script>
+var x = document.getElementById("demo");
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude + 
+  "<br>Longitude: " + position.coords.longitude;
+  mosque_lat.value=position.coords.latitude;
+  mosque_lon.value=position.coords.longitude;
+
+}
+</script>
+
+
+
+<form action="/load_in_db" method="post">
+
+
+
+<div class="container">
+	  <h2>Enter the details of the mosque</h2>
+	  <!-- <form action="/get_reviews"> -->
+	    <div class="form-group">
+	      
+
+
+	      
+	      	Mosque Name:
+	      	<input type="text" onfocus="this.value=''" class="form-control" id="mosque_name" value="Mosque Name" name="mosque_name"><br>
+
+	      	Latitude:
+	      	<input type="text" class="form-control" id="mosque_lat" value="Mosque Latitude" name="mosque_lat" ><br>
+
+	      	Longitude:
+	      	<input type="text" class="form-control" id="mosque_lon" value="Mosque Longitude" name="mosque_lon" ><br>
+
+	      	Fajr Time:
+	      	<input type="text" onfocus="this.value=''" class="form-control" id="fajr_time" value="HH:MM" name="fajr_time"><br>
+	      	Zuhur Time:
+	      	<input type="text" onfocus="this.value=''" class="form-control" id="zuhur_time" value="HH:MM" name="zuhur_time"><br>
+	      	Asar Time
+	      	<input type="text" onfocus="this.value=''" class="form-control" id="asar_time" value="HH:MM" name="asar_time"><br>
+	      	Maghrib Time:
+	      	<input type="text" onfocus="this.value=''" class="form-control" id="maghrib_time" value="HH:MM" name="maghrib_time"><br>
+	      	Isha Time:
+	      	<input type="text" onfocus="this.value=''" class="form-control" id="isha_time" value="HH:MM" name="isha_time"><br>
+
+	      	Contact Number:
+	      	<input type="text" onfocus="this.value=''" class="form-control" id="contact_num" value="Contact Number" name="contact_num"><br>
+
+	    
+	    </div>
+
+	    
+	    <button type="submit" class="btn btn-default">Submit</button>
+	  </form>
+</div>
+
+
+</form>
+
+
+
+
+</html>
