@@ -85,8 +85,10 @@ def send_image(foldername,filename):
 @application.route('/gallery')
 def get_gallery():
     directories = os.listdir('./files')
-    directories.remove(".gitignore")
-    directories.remove(".DS_Store")
+    if ".gitignore" in directories:
+        directories.remove(".gitignore")
+    if ".DS_Store" in directories:
+        directories.remove(".DS_Store")
 
     files=[]
     for directory in directories:
