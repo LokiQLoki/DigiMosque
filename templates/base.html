@@ -30,7 +30,7 @@ function showPosition(position) {
 
 
 
-<form action="/load_in_db" method="post">
+<form action="/load_in_db" method="post" enctype="multipart/form-data">
 
 
 
@@ -65,6 +65,9 @@ function showPosition(position) {
 	      	Contact Number:
 	      	<input type="text" onfocus="this.value=''" class="form-control" id="contact_num" value="Contact Number" name="contact_num"><br>
 
+	      	<strong>Image Files:</strong><br>
+    		<input id="file-picker" type="file" name="file" accept="image/*" multiple><br>
+
 	    
 	    </div>
 
@@ -76,6 +79,25 @@ function showPosition(position) {
 
 </form>
 
+<script>
+    $("#file-picker").change(function(){
+        var input = document.getElementById('file-picker');
+        for (var i=0; i<input.files.length; i++)
+        {
+        //koala.jpg, koala.JPG substring(index) lastIndexOf('a') koala.1.jpg
+            var ext= input.files[i].name.substring(input.files[i].name.lastIndexOf('.')+1).toLowerCase()
+            if ((ext == 'jpg') || (ext == 'png'))
+            {
+                $("#msg").text("Files are supported")
+            }
+            else
+            {
+                $("#msg").text("Files are NOT supported")
+                document.getElementById("file-picker").value ="";
+            }
+        }
+    } );
+</script>
 
 
 
