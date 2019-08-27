@@ -52,6 +52,7 @@ def search_in_quran():
     #now to store the images
     folder_name=mosque_name+"_"+contact_num
     target = os.path.join(APP_ROOT, 'files/{}'.format(folder_name))
+    target=target.replace(" ","")
     if not os.path.isdir(target):
         os.mkdir(target)
     print(request.files.getlist("file"))
@@ -61,7 +62,7 @@ def search_in_quran():
         filename = upload.filename
         # This is to verify files are supported
         ext = os.path.splitext(filename)[1]
-        if (ext == ".jpg") or (ext == ".png"):
+        if (ext == ".jpg") or (ext == ".png") or (ext == ".jpeg"):
             print("File supported moving on...")
         else:
             render_template("Error.html", message="Files uploaded are not supported...")
@@ -75,7 +76,26 @@ def search_in_quran():
 
     return "cool"
 
+@application.route('/upload/<foldername>/<filename>')
+def send_image(foldername,filename):
+    print(foldername,filename)
+    return send_from_directory("files/"+foldername, filename)
 
+
+@application.route('/gallery')
+def get_gallery():
+    directories = os.listdir('./files')
+    directories.remove(".gitignore")
+    directories.remove(".DS_Store")
+
+    files=[]
+    for directory in directories:
+        current_files=os.listdir('./files/'+directory)        
+        for file in current_files:
+            files.append((directory,file))
+
+    print(files)
+    return render_template("gallery.html", image_names=files)
 
 
     
