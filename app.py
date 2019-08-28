@@ -101,7 +101,7 @@ def add_mosque():
         upload.save(destination)
 
     table_name="Mosque"
-    result=add_to_db(table_name,[mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,folder_name,contact_num])
+    result=add_to_db(table_name,[mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,folder_name,contact_num,"default"])
 
 
 
