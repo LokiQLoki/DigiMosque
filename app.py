@@ -9,9 +9,13 @@ import requests
 import json
 
 import time
+import datetime
 import os
 import pickle
+import pandas as pd
 
+#this part for downloading images in a azipped folder
+import shutil
 
 # This part for the DB
 from flask_sqlalchemy import SQLAlchemy
@@ -155,16 +159,118 @@ def get_gallery():
     return render_template("gallery.html", items=mosques)
 
 
+def get_time_stamp_with_prefix(pref):
+    ts = time.time()
+    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+    st=st.replace(" ","")
+    st=st.replace("-","_")
+    st=st.replace(":","_")
+    st=pref+st
+    return st
 
-@application.route("/getall")
-def get_all():
+def create_dict_to_hold_data():
+    dict_mosques={}
+    dict_mosques["name"]=[]
+    dict_mosques["lat"]=[]
+    dict_mosques["lon"]=[]
+    dict_mosques["FA"]=[]
+    dict_mosques["ZU"]=[]
+    dict_mosques["AS"]=[]
+    dict_mosques["MA"]=[]
+    dict_mosques["IS"]=[]
+    dict_mosques["contact"]=[]
+    dict_mosques["image_folder_name"]=[]
+    dict_mosques["uploader_id"]=[]
+    dict_mosques["image_names"]=[]
+    return dict_mosques
+
+
+@application.route("/getall/<format>")
+def get_all(format):
+
     try:
         mosques=Mosque.query.all()
-        return  jsonify([e.serialize() for e in mosques])
+        print(mosques)
     except Exception as e:
         return(str(e))    
+
+
+
+
+
+    if format=="json":
+        return  jsonify([e.serialize() for e in mosques])
+    else:
+        location_of_file=os.path.join(APP_ROOT,"data")
+        # first, the columns
+        cols=["name","lat","lon", "FA", "ZU", "AS", "MA", "IS", "contact", "image_folder_name","uploader_id","image_names"]
+        dict_mosques=create_dict_to_hold_data()
+
+        for mosque in mosques:
+            print(type(mosque))
+            dict_mosques["name"].append(mosque.name)
+            dict_mosques["lat"].append(mosque.lat)
+            dict_mosques["lon"].append(mosque.lon)
+            dict_mosques["FA"].append(mosque.FA)
+            dict_mosques["ZU"].append(mosque.ZU)
+            dict_mosques["AS"].append(mosque.AS)
+            dict_mosques["MA"].append(mosque.MA)
+            dict_mosques["IS"].append(mosque.IS)
+            dict_mosques["contact"].append(mosque.contact)
+            dict_mosques["image_folder_name"].append(mosque.image_folder_name)
+            dict_mosques["uploader_id"].append(mosque.uploader_id)
+            dict_mosques["image_names"].append(mosque.image_names)
+
+        if format=="csv":
+            dfObj = pd.DataFrame(dict_mosques)
+            location_of_file=os.path.join(location_of_file,"csv")
+            fname=get_time_stamp_with_prefix("cv_")
+            final_file=os.path.join(location_of_file,fname)+".csv"
+            dfObj.to_csv(final_file)
+
+        if os.path.isfile(final_file):
+            return send_from_directory(location_of_file,fname+".csv")
+        else:
+            return "Desired file not found"
+
+
+            
+
+                
+
+
+
+@application.route("/getallimages")
+def get_all_images():
+    
+    st=get_time_stamp_with_prefix("imgs_")
+    print(APP_ROOT)
+    location_of_zip_file=os.path.join(APP_ROOT,"zips")
+    print("Zip file will be named ",st,"stored at ",location_of_zip_file)
+    
+    print("contents of ",location_of_zip_file,"are",os.listdir(location_of_zip_file))
+
+    output_file=os.path.join(location_of_zip_file,st)
+
+    
+    extension="zip"
+    try:
+        shutil.make_archive(output_file,extension,"files")
+        print(" after zipping contents of ",location_of_zip_file,"are",os.listdir(location_of_zip_file))
+
+        if os.path.isfile(output_file+"."+extension):
+            return send_from_directory(location_of_zip_file,st+"."+extension)
+        else:
+            return "Zip file not found"
+
+    except Exception as e:
+        return str(e)
+
+
 
 
 if __name__ == "__main__":
     
     application.run(debug=True)
+
+
