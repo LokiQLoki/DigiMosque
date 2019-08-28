@@ -116,7 +116,7 @@ def add_mosque():
 #this one is used specifically to get images
 @application.route('/upload/<foldername>/<filename>')
 def send_image(foldername,filename):
-    print(foldername,filename)
+    
     print("files/"+foldername+"/"+filename)
     print(os.path.isfile("files/"+foldername+"/"+filename))
     return send_from_directory("files/"+foldername, filename)
