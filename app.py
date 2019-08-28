@@ -118,7 +118,7 @@ def add_mosque():
 def send_image(foldername,filename):
     
     print("files/"+foldername+"/"+filename)
-    print(os.path.isfile("files/"+foldername+"/"+filename))
+    print("status of image file",os.path.isfile("files/"+foldername+"/"+filename))
     return send_from_directory("files/"+foldername, filename)
 
 
