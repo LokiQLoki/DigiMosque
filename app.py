@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request,send_from_directory
+from flask import Flask, render_template, request,send_from_directory, jsonify
 
 application = Flask(__name__)
 
@@ -103,18 +103,21 @@ def add_mosque():
     table_name="Mosque"
     result=add_to_db(table_name,[mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,contact_num,folder_name,"default"])
 
+    if "MOSQUE" in result:
+        return get_all()
+    else:
+        return result
 
 
 
-
-    return result
-
+#this one is used specifically to get images
 @application.route('/upload/<foldername>/<filename>')
 def send_image(foldername,filename):
     print(foldername,filename)
     return send_from_directory("files/"+foldername, filename)
 
 
+#this one is used to show all images
 @application.route('/gallery')
 def get_gallery():
     directories = os.listdir('./files')
@@ -133,7 +136,13 @@ def get_gallery():
     return render_template("gallery.html", image_names=files)
 
 
-    
+@application.route("/getall")
+def get_all():
+    try:
+        mosques=Mosque.query.all()
+        return  jsonify([e.serialize() for e in mosques])
+    except Exception as e:
+        return(str(e))    
 
 
 if __name__ == "__main__":
