@@ -107,7 +107,7 @@ def add_mosque():
     result=add_to_db(table_name,[mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,contact_num,folder_name,"default",image_names])
 
     if "MOSQUE" in result:
-        return get_all()
+        return get_gallery()
     else:
         return result
 

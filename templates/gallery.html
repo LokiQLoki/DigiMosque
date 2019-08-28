@@ -16,7 +16,7 @@
 </head> -->
 
 <head>
-        <title>Clean Up Sale. Great quality products at amazing price</title>
+        <title>List of mosques with photos, salah timings and contacts</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" >
@@ -54,10 +54,12 @@
 
 <div class="container">
     {% for item in items %}
-        <h3>{{item.name}}</h3>
-        <h4>{{item.lat}}</h4>
-        <h4>{{item.lon}}</h4>
-        <h4>{{item.contact}}
+        <h3>Mosque Name: {{item.name}}</h3>
+        <h4>Latitude: {{item.lat}} Longitude: {{item.lon}}</h4>
+        <h4>Salah Timings <small>Fajr: {{item.FA}} Zuhr: {{item.ZU}}</small></h4>
+        <h4><small>Asr: {{item.AS}} Maghrib: {{item.MA}} Isha: {{item.IS}}</small></h4>
+        <h4>Contact: {{item.contact}}</h4>
+        <h6><small>Uploader: {{item.uploader_id}}</small></h6>
 
 
         <div id="{{item.image_folder_name}}" class="carousel slide" data-ride="carousel">
