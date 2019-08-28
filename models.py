@@ -15,8 +15,9 @@ class Mosque(db.Model):
     contact = db.Column(db.String())
     image_folder_name = db.Column(db.String())
     uploader_id = db.Column(db.String())
+    image_names=db.Column(db.JSON())
 
-    def __init__(self, name, lat, lon, FA, ZU, AS, MA, IS, contact, image_folder_name,uploader_id):
+    def __init__(self, name, lat, lon, FA, ZU, AS, MA, IS, contact, image_folder_name,uploader_id,image_names):
         self.name = name
         self.lat = lat
         self.lon = lon
@@ -28,6 +29,7 @@ class Mosque(db.Model):
         self.contact = contact
         self.image_folder_name = image_folder_name
         self.uploader_id = uploader_id
+        self.image_names=image_names
 
 
 
@@ -47,6 +49,7 @@ class Mosque(db.Model):
             'IS':self.IS,            
             'contact':self.contact,
             'image_folder_name':self.image_folder_name,
-            'uploader_id':self.uploader_id
+            'uploader_id':self.uploader_id,
+            'image_names':self.image_names
 
         }

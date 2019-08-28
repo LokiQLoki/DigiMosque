@@ -1,83 +1,102 @@
 
 <html>
 
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+</head>
 	
-<p>Click the button to get your coordinates.</p>
+<!-- <p>Click the button to get your coordinates.</p> -->
 
-<button onclick="getLocation()">Try It</button>
+<!-- <button onclick="getLocation()">Try It</button> -->
+<body>
+	<p id="demo"></p>
 
-<p id="demo"></p>
+	<script>
+	var x = document.getElementById("demo");
 
-<script>
-var x = document.getElementById("demo");
+	function getLocation() {
+	  if (navigator.geolocation) {
+	    navigator.geolocation.getCurrentPosition(showPosition);
+	  } else { 
+	    x.innerHTML = "Geolocation is not supported by this browser.";
+	  }
+	}
 
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else { 
-    x.innerHTML = "Geolocation is not supported by this browser.";
-  }
-}
+	function showPosition(position) {
+	  // x.innerHTML = "Latitude: " + position.coords.latitude + 
+	  // "<br>Longitude: " + position.coords.longitude;
+	  mosque_lat.value=position.coords.latitude;
+	  mosque_lon.value=position.coords.longitude;
 
-function showPosition(position) {
-  x.innerHTML = "Latitude: " + position.coords.latitude + 
-  "<br>Longitude: " + position.coords.longitude;
-  mosque_lat.value=position.coords.latitude;
-  mosque_lon.value=position.coords.longitude;
-
-}
-</script>
-
-
-
-<form action="/load_in_db" method="post" enctype="multipart/form-data">
+	}
+	</script>
 
 
 
-<div class="container">
-	  <h2>Enter the details of the mosque</h2>
-	  <!-- <form action="/get_reviews"> -->
-	    <div class="form-group">
-	      
+	<form action="/load_in_db" method="post" enctype="multipart/form-data">
 
 
-	      
-	      	Mosque Name:
-	      	<input type="text" onfocus="this.value=''" class="form-control" id="mosque_name" value="Mosque Name" name="mosque_name"><br>
 
-	      	Latitude:
-	      	<input type="text" class="form-control" id="mosque_lat" value="Mosque Latitude" name="mosque_lat" ><br>
+		<div class="container">
+		  <h2>Enter the details of the mosque</h2>
+		  <!-- <form action="/get_reviews"> -->
+		    <div class="form-group">
+		    	<label>Mosque Name:</label>	 
+		      	<input type="text" onfocus="this.value=''" class="form-control" id="mosque_name" placeholder="Mosque Name" name="mosque_name">
+	      	</div>
 
-	      	Longitude:
-	      	<input type="text" class="form-control" id="mosque_lon" value="Mosque Longitude" name="mosque_lon" ><br>
+	      	<div class="form-group">
+		      	<label>Latitude:</label>	
+		      	<button type="button" onclick="getLocation()">Get Location</button> 
+		      	<input type="text" class="form-control" id="mosque_lat" placeholder="Mosque Latitude" name="mosque_lat" >
+	      	</div>
 
-	      	Fajr Time:
-	      	<input type="time" value="00:00" class="form-control" id="fajr_time" name="fajr_time"><br>
-	      	Zuhur Time:
-	      	<input type="time" value="00:00" class="form-control" id="zuhur_time" name="zuhur_time"><br>
-	      	Asar Time
-	      	<input type="time" value="00:00" class="form-control" id="asar_time" name="asar_time"><br>
-	      	Maghrib Time:
-	      	<input type="time" value="00:00" class="form-control" id="maghrib_time" name="maghrib_time"><br>
-	      	Isha Time:
-	      	<input type="time" value="00:00" class="form-control" id="isha_time" name="isha_time"><br>
+	      	<div class="form-group">
+		      	<label>Longitude:</label>
+		      	<input type="text" class="form-control" id="mosque_lon" placeholder="Mosque Longitude" name="mosque_lon" >
+	      	</div>
 
-	      	Contact Number:
-	      	<input type="text" onfocus="this.value=''" class="form-control" id="contact_num" value="Contact Number" name="contact_num"><br>
+	      	<div class="form-group">
+		      	<label>Fajr Time:</label>
+		      	<input type="time" value="00:00" class="form-control" id="fajr_time" name="fajr_time">
+	  		</div>
+	  		<div class="form-group">
+		      	<label>Fajr Time:</label>Zuhur Time:
+		      	<input type="time" placeholder="00:00" class="form-control" id="zuhur_time" name="zuhur_time">
+	        </div>
+	      	<div class="form-group">
+		      	<label>Asar Time</label>
+		      	<input type="time" placeholder="00:00" class="form-control" id="asar_time" name="asar_time">
+	      	</div>
+	      	<div class="form-group">
+		      	<label>Maghrib Time:</label>
+		      	<input type="time" placeholder="00:00" class="form-control" id="maghrib_time" name="maghrib_time">
+			</div>
+	      	<div class="form-group">
+		      	<label>Isha Time:</label>
+		      	<input type="time" placeholder="00:00" class="form-control" id="isha_time" name="isha_time">
+			</div>    
+	      	<div class="form-group">
+		      	<label>Contact Number:</label>
+		      	<input type="text" onfocus="this.value=''" class="form-control" id="contact_num" placeholder="Contact Number" name="contact_num">
+		    </div>
+	      	<div class="form-group">
+		      	<label>Image Files:</label>
+	    		<input id="file-picker" type="file" name="file" accept="image/*" multiple><br>	    
+	    	</div>
 
-	      	<strong>Image Files:</strong><br>
-    		<input id="file-picker" type="file" name="file" accept="image/*" multiple><br>
-
-	    
-	    </div>
-
-	    
-	    <button type="submit" class="btn btn-default">Submit</button>
-	  </form>
-</div>
+		    
+		    <button type="submit" class="btn btn-default">Submit</button>
+		</div>
 
 
-</form>
+	</form>
 
 <script>
     $("#file-picker").change(function(){
@@ -99,6 +118,7 @@ function showPosition(position) {
     } );
 </script>
 
+</body>
 
 
 </html>

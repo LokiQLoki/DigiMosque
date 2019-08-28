@@ -52,7 +52,8 @@ def add_to_db(table_name,list_of_values):
                 IS = list_of_values[7],
                 contact = list_of_values[8],
                 image_folder_name=list_of_values[9],
-                uploader_id=list_of_values[10]
+                uploader_id=list_of_values[10],
+                image_names=list_of_values[11]
                 )
             db.session.add(mosque)
             db.session.commit()
@@ -74,6 +75,7 @@ def add_mosque():
     maghrib_time=str(request.form['maghrib_time'])
     isha_time=str(request.form['isha_time'])
     contact_num=str(request.form['contact_num'])
+    image_names=[]
 
     print(mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,contact_num)
 
@@ -89,6 +91,7 @@ def add_mosque():
         print(upload)
         print("{} is the file name".format(upload.filename))
         filename = upload.filename
+        image_names.append(filename)
         # This is to verify files are supported
         ext = os.path.splitext(filename)[1]
         if (ext == ".jpg") or (ext == ".png") or (ext == ".jpeg"):
@@ -101,7 +104,7 @@ def add_mosque():
         upload.save(destination)
 
     table_name="Mosque"
-    result=add_to_db(table_name,[mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,contact_num,folder_name,"default"])
+    result=add_to_db(table_name,[mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,contact_num,folder_name,"default",image_names])
 
     if "MOSQUE" in result:
         return get_all()
