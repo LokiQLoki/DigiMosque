@@ -82,8 +82,8 @@ def add_mosque():
 
     #now to store the images
     folder_name=mosque_name+"_"+contact_num
+    folder_name=folder_name.replace(" ","")
     target = os.path.join(APP_ROOT, 'files/{}'.format(folder_name))
-    target=target.replace(" ","")
     if not os.path.isdir(target):
         os.mkdir(target)
     print(request.files.getlist("file"))
@@ -120,9 +120,23 @@ def send_image(foldername,filename):
     return send_from_directory("files/"+foldername, filename)
 
 
+
+
+
+
 #this one is used to show all images
 @application.route('/gallery')
 def get_gallery():
+
+    #first, get all details of Mosques
+    try:
+        mosques=Mosque.query.all()
+        # print("Results are",mosques)
+        # mosques=jsonify([e.serialize() for e in mosques])
+        print("Results are",mosques[0])
+    except Exception as e:
+        return(str(e))    
+
     directories = os.listdir('./files')
     if ".gitignore" in directories:
         directories.remove(".gitignore")
@@ -136,7 +150,8 @@ def get_gallery():
             files.append((directory,file))
 
     print(files)
-    return render_template("gallery.html", image_names=files)
+    return render_template("gallery.html", items=mosques)
+
 
 
 @application.route("/getall")
