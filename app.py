@@ -245,7 +245,9 @@ def get_all_images():
     
     st=get_time_stamp_with_prefix("imgs_")
     print(APP_ROOT)
-    location_of_zip_file=os.path.join(APP_ROOT,"zips")
+    location_of_zip_file=os.path.join(APP_ROOT,"data")
+    location_of_zip_file=os.path.join(location_of_zip_file,"images")
+    location_of_zip_file=os.path.join(location_of_zip_file,"zips")
     print("Zip file will be named ",st,"stored at ",location_of_zip_file)
     
     print("contents of ",location_of_zip_file,"are",os.listdir(location_of_zip_file))
