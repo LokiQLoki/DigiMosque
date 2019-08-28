@@ -54,9 +54,9 @@ def add_to_db(table_name,list_of_values):
                 image_folder_name=list_of_values[9],
                 uploader_id=list_of_values[10]
                 )
-            db.session.add(book)
+            db.session.add(mosque)
             db.session.commit()
-            return "Book added. book id={}".format(book.id)
+            return "MOSQUE added. mosque id={}".format(mosque.id)
         except Exception as e:
             return(str(e))
 
