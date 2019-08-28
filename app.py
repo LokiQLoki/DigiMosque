@@ -13,13 +13,15 @@ import os
 import pickle
 
 
-# def setup_app(application):
-#    # All your initialization code
-   
-#    helper.setup()
+# This part for the DB
+from flask_sqlalchemy import SQLAlchemy
 
+application.config.from_object(os.environ['APP_SETTINGS'])
+application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(application)
 
-# setup_app(application)
+from models import Mosque
+
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -34,8 +36,35 @@ def search():
     return render_template('index.html')
 
 
+
+#this function adds given list to table
+def add_to_db(table_name,list_of_values):
+    if table_name=="Mosque":
+        try:
+            mosque=Mosque(
+                name = list_of_values[0],
+                lat = list_of_values[1],
+                lon= list_of_values[2],
+                FA=list_of_values[3],
+                ZU = list_of_values[4],
+                AS = list_of_values[5],
+                MA = list_of_values[6],
+                IS = list_of_values[7],
+                contact = list_of_values[8],
+                image_folder_name=list_of_values[9],
+                uploader_id=list_of_values[10]
+                )
+            db.session.add(book)
+            db.session.commit()
+            return "Book added. book id={}".format(book.id)
+        except Exception as e:
+            return(str(e))
+
+
+
+
 @application.route('/load_in_db',methods=["POST"])
-def search_in_quran():
+def add_mosque():
     mosque_name=str(request.form['mosque_name'])
     mosque_lat=str(request.form['mosque_lat'])
     mosque_lon=str(request.form['mosque_lon'])
@@ -71,10 +100,14 @@ def search_in_quran():
         print("Save it to:", destination)
         upload.save(destination)
 
+    table_name="Mosque"
+    result=add_to_db(table_name,[mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,folder_name,contact_num])
 
 
 
-    return "cool"
+
+
+    return result
 
 @application.route('/upload/<foldername>/<filename>')
 def send_image(foldername,filename):
