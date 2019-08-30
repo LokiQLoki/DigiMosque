@@ -162,12 +162,13 @@ def add_mosque():
         upload.save(destination)
         
         foo = Image.open(destination)
-        basewidth = 500
-        wpercent = (basewidth/float(foo.size[0]))
-        hsize = int((float(foo.size[1])*float(wpercent)))
-        foo=foo.resize([basewidth,hsize], Image.ANTIALIAS)
+        
+        # basewidth = 500
+        # wpercent = (basewidth/float(foo.size[0]))
+        # hsize = int((float(foo.size[1])*float(wpercent)))
+        # foo=foo.resize([basewidth,hsize], Image.ANTIALIAS)
 
-        # foo = foo.resize((160,300),Image.ANTIALIAS)
+        foo = foo.resize((160,300),Image.ANTIALIAS)
         # size=[300,300]
         # foo=foo.thumbnail(size, Image.ANTIALIAS)
         foo.save(destination)
