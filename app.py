@@ -20,6 +20,9 @@ import shutil
 # This part for the DB
 from flask_sqlalchemy import SQLAlchemy
 
+#to upload image into S3
+import boto3
+
 application.config.from_object(os.environ['APP_SETTINGS'])
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(application)
@@ -58,12 +61,47 @@ def add_to_db(table_name,list_of_values):
                 image_folder_name=list_of_values[9],
                 uploader_id=list_of_values[10],
                 image_names=list_of_values[11]
+                
                 )
             db.session.add(mosque)
             db.session.commit()
             return "MOSQUE added. mosque id={}".format(mosque.id)
         except Exception as e:
             return(str(e))
+
+
+#this function adds a file to the S3 bucket
+def add_to_S3_bucket(foldername_in_S3,filename,file_location):
+    S3_BUCKET = os.environ.get('S3_BUCKET_NAME')
+    AWS_ACCESS_KEY_ID=os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY=os.environ.get('AWS_SECRET_ACCESS_KEY')
+
+    try:
+        # Create an S3 client
+        s3 = boto3.client('s3')
+
+        
+        print("Details follow")
+        print("Source file at ",file_location)
+        print("just filename ",filename)
+        
+        filename_in_S3=foldername_in_S3+"/"+filename
+        print("Filename in S3",filename_in_S3)
+
+
+        
+
+        # Uploads the given file using a managed uploader, which will split up large
+        # files automatically and upload parts in parallel.
+        s3.upload_file(file_location, S3_BUCKET, filename_in_S3)
+
+        return("Uploaded file successfully")
+    except Exception as e:
+        return str(e)
+
+
+
+
 
 
 
@@ -79,9 +117,10 @@ def add_mosque():
     maghrib_time=str(request.form['maghrib_time'])
     isha_time=str(request.form['isha_time'])
     contact_num=str(request.form['contact_num'])
+    uploader=str(request.form["uploader"])
     image_names=[]
 
-    print(mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,contact_num)
+    print(mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,contact_num,uploader)
 
 
     #now to store the images
@@ -92,8 +131,20 @@ def add_mosque():
         os.mkdir(target)
     print(request.files.getlist("file"))
     for upload in request.files.getlist("file"):
+
+        
+        
+
+        
+
         print(upload)
         print("{} is the file name".format(upload.filename))
+        
+
+        
+
+
+
         filename = upload.filename
         image_names.append(filename)
         # This is to verify files are supported
@@ -106,9 +157,15 @@ def add_mosque():
         print("Accept incoming file:", filename)
         print("Save it to:", destination)
         upload.save(destination)
+        upload_return_string=add_to_S3_bucket("images/"+folder_name,filename, destination)
+        print(upload_return_string)
+        if "Uploaded file successfully" not in upload_return_string:
+            return "Abort, some issue in uploading image"
+
+
 
     table_name="Mosque"
-    result=add_to_db(table_name,[mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,contact_num,folder_name,"default",image_names])
+    result=add_to_db(table_name,[mosque_name,mosque_lat,mosque_lon,fajr_time,zuhur_time,asar_time,maghrib_time,isha_time,contact_num,folder_name,uploader,image_names])
 
     if "MOSQUE" in result:
         return get_gallery()

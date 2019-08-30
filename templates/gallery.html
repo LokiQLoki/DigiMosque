@@ -77,11 +77,13 @@
                 {% for i in range(item.image_names|length) %}
                     {% if i ==0 %}
                         <div class="item active">                                              
-                            <img src="{{url_for('send_image',foldername=item.image_folder_name, filename=item.image_names[i])}}">                        
+                            <!-- <img src="{{url_for('send_image',foldername=item.image_folder_name, filename=item.image_names[i])}}">                         -->
+                            <img src="{{"https://digital-mosque-bucket2.s3.amazonaws.com/images/"+item.image_folder_name+"/"+item.image_names[i]}}">
                         </div>
                     {% else %}
                         <div class="item">                                              
-                            <img src="{{url_for('send_image',foldername=item.image_folder_name, filename=item.image_names[i])}}">                        
+                            <!-- <img src="{{url_for('send_image',foldername=item.image_folder_name, filename=item.image_names[i])}}">                         -->
+                            <img src="{{"https://digital-mosque-bucket2.s3.amazonaws.com/images/"+item.image_folder_name+"/"+item.image_names[i]}}">
                         </div>
                     {% endif %}
                 {% endfor  %}
