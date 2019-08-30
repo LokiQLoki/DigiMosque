@@ -6,6 +6,9 @@ application = Flask(__name__)
 import requests
 
 
+#this library to resize images
+from PIL import Image
+
 import json
 
 import time
@@ -157,6 +160,19 @@ def add_mosque():
         print("Accept incoming file:", filename)
         print("Save it to:", destination)
         upload.save(destination)
+        
+        foo = Image.open(destination)
+        basewidth = 500
+        wpercent = (basewidth/float(foo.size[0]))
+        hsize = int((float(foo.size[1])*float(wpercent)))
+        foo=foo.resize([basewidth,hsize], Image.ANTIALIAS)
+
+        # foo = foo.resize((160,300),Image.ANTIALIAS)
+        # size=[300,300]
+        # foo=foo.thumbnail(size, Image.ANTIALIAS)
+        foo.save(destination)
+
+
         upload_return_string=add_to_S3_bucket("images/"+folder_name,filename, destination)
         print(upload_return_string)
         if "Uploaded file successfully" not in upload_return_string:
